@@ -65,12 +65,28 @@ export class ListMessagesComponent implements OnInit {
       //Chaque fois qu'il y a un changement dans les messages,
       //la fonction de rappel (ms) => (this.messagesList = ms) est appelée, mettant à jour this.messagesList avec les nouveaux messages.
       this.messagesStoreService.messages$.subscribe((ms) =>
-        ms.forEach((message) => {
+      this.messagesService.getAllMessages().subscribe(messages=> {
+        this.messagesChannel=[];
+         messages.forEach((message) => {
+          
+          
+          //this.allMessages = this.messagesStoreService.getMessages();
           if (message.channel?.id == this.idChannel) {
             //Je rajoute les éléments dans un nouveau tableau
             this.messagesChannel.push(message);
           }
         })
+      })
+
+
+        //ms.forEach((message) => {
+          
+          //this.allMessages = this.messagesStoreService.getMessages();
+         // if (message.channel?.id == this.idChannel) {
+            //Je rajoute les éléments dans un nouveau tableau
+            //this.messagesChannel.push(message);
+         // }
+       // })
       );
     });
     
@@ -115,6 +131,7 @@ export class ListMessagesComponent implements OnInit {
           .getAllMessages()
           .subscribe((messages) => (this.messagesList = messages));
       });
+      this.messagesStoreService.deleteMessageById(id);
   }}
 
   update(id: number | undefined) {
