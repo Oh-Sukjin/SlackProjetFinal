@@ -71,12 +71,21 @@ export class ListMessagesComponent implements OnInit {
           
           
           //this.allMessages = this.messagesStoreService.getMessages();
-          if (message.channel?.id == this.idChannel) {
+          if (message.channel?.id == this.idChannel && message.id) {
             //Je rajoute les éléments dans un nouveau tableau
             this.messagesChannel.push(message);
+            
           }
         })
+        this.messagesChannel.sort((a,b)=> {
+          if(a.id && b.id){
+         return a.id - b.id }
+          else{
+            return 0;
+
+          } });
       })
+      
 
 
         //ms.forEach((message) => {
@@ -88,7 +97,9 @@ export class ListMessagesComponent implements OnInit {
          // }
        // })
       );
+      
     });
+    
     
 
 
@@ -143,6 +154,7 @@ export class ListMessagesComponent implements OnInit {
 
           this.formMessage = this.fb.group({
             content: [message.content || ''],
+            
           });
         });
     }
