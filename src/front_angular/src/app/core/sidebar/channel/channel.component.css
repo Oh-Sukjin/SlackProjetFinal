@@ -1,3 +1,9 @@
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
 .channel-component {
   display: flex;
   flex-direction: column;
@@ -52,6 +58,7 @@
 .btns-open {
   display: block;
 }
+
 /* Gestion des deux boutons */
 .btn-config {
   display: flex;
@@ -63,6 +70,72 @@
 .btn:hover {
   color: var(--primary-color-blanc);
   background-color: var(--hover-color);
+}
+
+/* Gestion des deux boutons */
+.btn-config {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--statut-color-unselected);
+  border-radius: var(--border-radius-bloc);
+}
+
+.btn:hover {
+  color: var(--primary-color-blanc);
+  background-color: var(--hover-color);
+}
+
+/*Gestion modale et elements */
+.modal-channel {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--primary-color-modal_background);
+  border-radius: var(--border-radius-bloc);
+}
+
+.modal-hidden {
+  display: none;
+}
+
+.modal-open {
+  display: block;
+}
+.modal-delete-hidden {
+  display: none;
+}
+
+.modal-delete-open {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 0);
+
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--primary-color-modal_background);
+  border-radius: var(--border-radius-bloc);
+}
+
+h1,
+p {
+  text-align: center;
+}
+
+.btn-cancel {
+  border: 1px solid var(--statut-color-unselected);
+}
+
+.btn-config-modal {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
 }
 
 /* Gestion des deux boutons */
@@ -109,58 +182,4 @@ p {
 
 .modal-hidden {
   display: none;
-}
-
-.modal-open {
-  display: block;
-}
-
-/* Gestion des deux boutons */
-.btn-config {
-  display: flex;
-  flex-direction: column;
-  border: 1px solid var(--statut-color-unselected);
-  border-radius: var(--border-radius-bloc);
-}
-
-.btn:hover {
-  color: var(--primary-color-blanc);
-  background-color: var(--hover-color);
-}
-
-/*Gestion modale et elements */
-.modal-channel {
-  position: absolute;
-  left: 50%;
-  transform: translate(-50%, 0);
-
-  padding: 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  background-color: var(--primary-color-modal_background);
-  border-radius: var(--border-radius-bloc);
-}
-
-h1,
-p {
-  text-align: center;
-}
-
-.btn-cancel {
-  border: 1px solid var(--statut-color-unselected);
-}
-
-.btn-config-modal {
-  display: flex;
-  gap: 15px;
-  justify-content: center;
-}
-
-.modal-hidden {
-  display: none;
-}
-
-.modal-open {
-  display: block;
 }

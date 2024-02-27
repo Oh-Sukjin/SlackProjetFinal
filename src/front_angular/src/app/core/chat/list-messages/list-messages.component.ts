@@ -18,7 +18,7 @@ import { UsersService } from '../../../service/users.service/users.service';
   styleUrl: './list-messages.component.css',
 })
 export class ListMessagesComponent implements OnInit {
-  messagesList: Message[] = [];
+  messagesList: Message[] = []; // messagesList: Message[] = [];
   messages: Message[] = [];
   channel!: Channel;
   idChannel!: number;
@@ -39,8 +39,7 @@ export class ListMessagesComponent implements OnInit {
     private channelPartageService: ChannelPartageService,
     private channelService: ChannelServiceComponent,
     private fb: FormBuilder,
-    private userPartageService: UserPartageService,
-    
+    private userPartageService: UserPartageService
   ) {}
 
   //Partie Channel
@@ -73,31 +72,27 @@ export class ListMessagesComponent implements OnInit {
         })
       );
     });
-    
-
-
-   
 
     //this.messagesService.getAllMessages().subscribe({...}): Cela souscrit à l'observable renvoyé par la méthode getAllMessages()
     // dans messagesService. Lorsque de nouveaux messages sont reçus, la fonction de rappel next est exécutée.
     //this.messagesService.getAllMessages().subscribe({
-     // next: (messages: Message[]) => {
-        //Cette fonction gère les nouveaux messages reçus.
-        //this.messagesStoreService.messages = messages; //Cela met à jour la propriété messages dans messagesStoreService avec les messages reçus.
-       // messages.forEach((element) => {
-          //je trie les éléments du channel
-         // if (element.channel?.id == this.idChannel) {
-            //console.log(element);
+    // next: (messages: Message[]) => {
+    //Cette fonction gère les nouveaux messages reçus.
+    //this.messagesStoreService.messages = messages; //Cela met à jour la propriété messages dans messagesStoreService avec les messages reçus.
+    // messages.forEach((element) => {
+    //je trie les éléments du channel
+    // if (element.channel?.id == this.idChannel) {
+    //console.log(element);
 
-            //Je rajoute les éléments dans un nouveau tableau
-          //  this.messagesChannel.push(element);
-        //  }
-      //  });
+    //Je rajoute les éléments dans un nouveau tableau
+    //  this.messagesChannel.push(element);
+    //  }
+    //  });
 
-       // this.messagesList = messages;
-       // this.messagesList.forEach(() => this.buttonsOpen.push(false));
-     // },
-  //  });
+    // this.messagesList = messages;
+    // this.messagesList.forEach(() => this.buttonsOpen.push(false));
+    // },
+    //  });
   }
 
   openButtons(index: number) {
@@ -105,9 +100,9 @@ export class ListMessagesComponent implements OnInit {
   }
 
   delete(id: number | undefined) {
-    console.log("fonction delete");
-    
-    if (id){
+    console.log('fonction delete');
+
+    if (id) {
       this.messagesService.deleteMessage(id).subscribe((message) => {
         console.log("Message de l'ID : suprimer", id);
         console.log(message);
@@ -115,7 +110,8 @@ export class ListMessagesComponent implements OnInit {
           .getAllMessages()
           .subscribe((messages) => (this.messagesList = messages));
       });
-  }}
+    }
+  }
 
   update(id: number | undefined) {
     if (id) {
@@ -123,7 +119,6 @@ export class ListMessagesComponent implements OnInit {
       this.messagesService
         .getMessagesById(this.idMessage)
         .subscribe((message) => {
-
           this.formMessage = this.fb.group({
             content: [message.content || ''],
           });

@@ -5,9 +5,8 @@
     <ul>
       <li *ngFor="let channel of listChannels; let i = index">
         <div (click)="changeIdChannel(channel.id)" class="channel-item">
-          
-            {{ channel.channelName }}
-          
+          {{ channel.channelName }}
+
           <div
             class="setting-open"
             *ngIf="
@@ -38,13 +37,13 @@
             >
               <div class="btn-config">
                 <button
-                  (click)="updateChannel(channel.id)"
+                  (click)="updateChannel(channel.id, i)"
                   class="btn delete-btn"
                 >
                   Modifier le canal
                 </button>
                 <button
-                  (click)="deleteChannel(channel.id)"
+                  (click)="openDeleteChannel(channel.id,i)"
                   class="btn delete-btn"
                 >
                   Supprimer le canal
@@ -54,13 +53,19 @@
           </div>
         </div>
 
-        <div [ngClass]="[modalUpdateOpen]" class="modal-channel">
-          <h1>Renommer ce canal</h1>
-
+        <div
+          [ngClass]="{
+            'modal-channel': openForm[i],
+            'modal-hidden': !openForm[i],
+          }"
+          class="modal-channel"
+        >
+        <h1>Renommer ce canal</h1>
           <form
             *ngIf="idChannel === channel.id && formChannel"
             [formGroup]="formChannel"
           >
+            
             <div>
               <label for="channelName" class="form-label"
                 >Nom actuel du canal</label
@@ -82,12 +87,30 @@
             </div>
 
             <div class="btn-config-modal">
-              <button (click)="cancel()" class="btn btn-cancel">Annuler</button>
-              <button (click)="updateChannel(idChannel)" class="btn btn-valid">
-                Renommer
+              <button (click)="cancelForm(i)" class="btn btn-cancel">
+                Annuler
               </button>
+              <button (click)="save(i)" class="btn btn-valid">Renommer</button>
             </div>
           </form>
+        </div>
+
+        <div
+          [ngClass]="{
+            'modal-delete-open': openDelete[i],
+            'modal-delete-hidden': !openDelete[i],
+          }"
+          class="modal-delete"
+        >
+          <h1>Souhaitez vous définitivement supprimer ce canal ?</h1>
+          <p>Attention... vos données seront entièrement supprimées 😰</p>
+
+          <div class="btn-config-modal">
+            <button (click)="cancelDelete(i)" class="btn btn-cancel">Annuler</button>
+            <button (click)="delete(channel.id)" class="btn btn-danger">
+              Supprimer
+            </button>
+          </div>
         </div>
       </li>
     </ul>
@@ -113,16 +136,3 @@
     </div>
   </div>
 </div>
-
-<!-- DELETE
-<div [ngClass]="[modalDeleteOpen]" class="modal-channel">
-  <h1>Souhaitez vous définitivement supprimer ce canal ?</h1>
-  <p>Attention... vos données seront entièrement supprimées 😰</p>
-
-    <div class="btn-config-modal">
-      <button (click)="cancel()" class="btn btn-cancel">Annuler</button>
-      <button (click)="delete(idChannel)" class="btn btn-danger">
-        Renommer
-      </button>
-    </div>
-</div>-->

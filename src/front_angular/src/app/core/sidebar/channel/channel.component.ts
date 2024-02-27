@@ -3,6 +3,7 @@ import { Channel } from '../../models/channel';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChannelServiceComponent } from '../../../service/channel.service/channel.service.component';
 import { ChannelPartageService } from '../../../service/servicePartage/channel-partage.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-channel',
@@ -13,17 +14,17 @@ export class ChannelComponent implements OnInit {
   formChannel!: FormGroup;
   listChannels: Channel[] = [];
   longeurChannels!: number;
+  idChannel!: number;
+
+  // Variables liées au HTML dynamique
   showForm: boolean = false;
   showInput: boolean = false;
   buttonsOpen: boolean[] = [];
-  modalUpdateOpen = 'modal-hidden';
-  idChannel!: number;
-
-  openButtons(index: number) {
-    this.buttonsOpen[index] = !this.buttonsOpen[index];
-  }
+  openForm: boolean[] = [];
+  openDelete: boolean[] = [];
 
   constructor(
+    private router: Router,
     private channelService: ChannelServiceComponent,
     private channelPartageService: ChannelPartageService,
     private fb: FormBuilder
@@ -36,22 +37,19 @@ export class ChannelComponent implements OnInit {
     });
   }
 
+  openButtons(index: number) {
+    this.buttonsOpen[index] = !this.buttonsOpen[index];
+  }
+
   createChannel(channelName: string) {
     const newChannel: Channel = { id: this.longeurChannels + 1, channelName };
     this.channelService.addChannel(newChannel).subscribe((channel) => {
-      console.log(channel);
       this.ngOnInit();
-      //this.getAllChannels(); //on appelle getAllChannels() pour mettre à jour la liste des chaînes après l'ajout de la nouvelle chaîne.
-      console.log(newChannel);
     });
   }
 
-  deleteChannel(id: number) {
-    this.channelService.deleteChannel(id).subscribe((v) => {
-      this.channelService
-        .getAllChannels()
-        .subscribe((channels) => (this.listChannels = channels));
-    });
+  openDeleteChannel(id: number, index: number) {
+    this.openDelete[index] = !this.openDelete[index];
   }
 
   getChannel(id: number) {
@@ -62,50 +60,57 @@ export class ChannelComponent implements OnInit {
     });
   }
 
-  /*
-  updateChannel(id: number, newName: string): void {
-    const updatedChannel: Channel = { id, channelName: newName };
-    this.channelService.updateChannel(updatedChannel).subscribe(() => {
-      this.getAllChannels();
-    });
-  }
-  */
-
-  updateChannel(id: number | undefined) {
+  updateChannel(id: number | undefined, index: number) {
     if (id) {
       this.idChannel = id;
       this.channelService
         .getChannelById(this.idChannel)
         .subscribe((channel) => {
+
           this.formChannel = this.fb.group({
             channelName: [
               channel.channelName || '',
-              [Validators.maxLength(200), Validators.maxLength(10)],
+              [Validators.maxLength(10)],
             ],
           });
         });
     }
-
-    if (this.modalUpdateOpen == 'modal-hidden') {
-      this.modalUpdateOpen = 'modal-open';
-    } else {
-      this.modalUpdateOpen = 'modal-hidden';
-    }
+    this.openForm[index] = !this.openForm[index];
   }
 
-  save() {
+  cancelForm(index: number) {
+    this.openForm[index] = !this.openForm[index];
+  }
+  cancelDelete(index: number) {
+    this.openDelete[index] = !this.openDelete[index];
+  }
+
+  save(index: number) {
     const newChannel: Channel = {
       ...this.formChannel.value,
       id: this.idChannel,
     };
-    this.channelService.updateChannel(newChannel).subscribe();
-    this.channelPartageService.updateChannel(newChannel);
-    // Tenter de ra-fraichir la page
+
+    this.channelService.updateChannel(newChannel).subscribe(() => {
+      this.channelPartageService.updateChannel(newChannel);
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/']);
+      });
+    });
+
+    this.formChannel.reset();
+    this.openForm[index] = !this.openForm[index];
   }
 
-  cancel() {}
+  delete(id: number) {
+    this.channelService.deleteChannel(id).subscribe((v) => {
+      this.channelService
+        .getAllChannels()
+        .subscribe((channels) => (this.listChannels = channels));
+    });
+  }
 
-  changeIdChannel(id: number){
+  changeIdChannel(id: number) {
     this.channelPartageService.changeIdChannel(id);
   }
 }
