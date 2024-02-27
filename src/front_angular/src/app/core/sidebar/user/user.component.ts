@@ -39,10 +39,8 @@ export class UserComponent {
     //L'Observable retourné par getAllUsers() émettra les chaînes récupérées lorsqu'elles seront disponibles.
     //Le callback passé à subscribe() est exécuté chaque fois qu'une nouvelle valeur est émise.
     this.userService.getAllUsers().subscribe((users) => {
-      
       //on les stockes dans la variable listChannels.
       this.listUsers = users;
-      
     });
   }
   createUser(userName: string): void {
@@ -72,5 +70,10 @@ export class UserComponent {
       this.updateUserSuccess = true;
       console.log(this.id, this.updateUser);
     });
+  }
+
+  changeUserId(idUser: number) {
+    this.userPartageService.changeIdUser(idUser);
+    console.log('changement de user : ', idUser);
   }
 }
