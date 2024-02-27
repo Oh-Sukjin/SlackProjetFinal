@@ -64,14 +64,45 @@ export class ListMessagesComponent implements OnInit {
       //Chaque fois qu'il y a un changement dans les messages,
       //la fonction de rappel (ms) => (this.messagesList = ms) est appelée, mettant à jour this.messagesList avec les nouveaux messages.
       this.messagesStoreService.messages$.subscribe((ms) =>
-        ms.forEach((message) => {
-          if (message.channel?.id == this.idChannel) {
+      this.messagesService.getAllMessages().subscribe(messages=> {
+        this.messagesChannel=[];
+         messages.forEach((message) => {
+          
+          
+          //this.allMessages = this.messagesStoreService.getMessages();
+          if (message.channel?.id == this.idChannel && message.id) {
             //Je rajoute les éléments dans un nouveau tableau
             this.messagesChannel.push(message);
+            
           }
         })
+        this.messagesChannel.sort((a,b)=> {
+          if(a.id && b.id){
+         return a.id - b.id }
+          else{
+            return 0;
+
+          } });
+      })
+      
+
+
+        //ms.forEach((message) => {
+          
+          //this.allMessages = this.messagesStoreService.getMessages();
+         // if (message.channel?.id == this.idChannel) {
+            //Je rajoute les éléments dans un nouveau tableau
+            //this.messagesChannel.push(message);
+         // }
+       // })
       );
+      
     });
+    
+    
+
+
+   
 
     //this.messagesService.getAllMessages().subscribe({...}): Cela souscrit à l'observable renvoyé par la méthode getAllMessages()
     // dans messagesService. Lorsque de nouveaux messages sont reçus, la fonction de rappel next est exécutée.
@@ -110,8 +141,8 @@ export class ListMessagesComponent implements OnInit {
           .getAllMessages()
           .subscribe((messages) => (this.messagesList = messages));
       });
-    }
-  }
+      this.messagesStoreService.deleteMessageById(id);
+  }}
 
   update(id: number | undefined) {
     if (id) {
@@ -121,6 +152,7 @@ export class ListMessagesComponent implements OnInit {
         .subscribe((message) => {
           this.formMessage = this.fb.group({
             content: [message.content || ''],
+            
           });
         });
     }

@@ -8,6 +8,7 @@ import { Channel } from '../../models/channel';
 import { UserPartageService } from '../../../service/userPartage/user.partage.service';
 import { User } from '../../models/user';
 import { UsersService } from '../../../service/users.service/users.service';
+import { MessagesStoreService } from '../../../service/messages-store/messages-store.service';
 
 @Component({
   selector: 'app-form-message',
@@ -28,7 +29,8 @@ export class FormMessageComponent implements OnInit {
     private messageService: MessagesService,
     private router: Router,
     private userPartageService: UserPartageService,
-    private userService: UsersService
+    private userService: UsersService,
+    private messageStoreService: MessagesStoreService,
   ) {}
 
   ngOnInit() {
@@ -72,11 +74,13 @@ export class FormMessageComponent implements OnInit {
     };
 
     console.log('newMessage -- ' + newMessage);
+    this.messageStoreService.addMessage(newMessage);
 
     this.messageService.addMessage(newMessage).subscribe((v) => {
       // this.router.navigate(['/chat/', this.idChannel]);
 
       console.log(v);
     });
+    this.formMessage.reset();
   }
 }
