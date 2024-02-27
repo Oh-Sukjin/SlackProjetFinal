@@ -86,19 +86,24 @@ export class ChannelComponent implements OnInit {
   }
 
   save(index: number) {
-    const newChannel: Channel = {
-      ...this.formChannel.value,
-      id: this.idChannel,
-    };
+    this.channelService.getChannelById(this.idChannel).subscribe((chan) => {
+      const newChannel: Channel = {
+        ...this.formChannel.value,
+        id: this.idChannel,
+        messages: chan.messages,
+      };
 
-    this.channelService.updateChannel(newChannel).subscribe(() => {
-      this.channelPartageService.updateChannel(newChannel);
-      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
-        this.router.navigate(['/']);
+      this.channelService.updateChannel(newChannel).subscribe(() => {
+        this.channelPartageService.updateChannel(newChannel);
+        this.router
+          .navigateByUrl('/', { skipLocationChange: true })
+          .then(() => {
+            this.router.navigate(['/']);
+          });
       });
-    });
 
-    this.formChannel.reset();
+      this.formChannel.reset();
+    });
     this.openForm[index] = !this.openForm[index];
   }
 
